@@ -18,13 +18,13 @@
 # include <stdlib.h>
 # include <stdarg.h>
 # include <fcntl.h>
-#include "../libft/libft.h"
-
+# include "../libft/libft.h"
 
 void	execute_first_command(int *pipefd, char **argv, char **env);
 char	**find_path(char **env);
 char	*access_path(char **env, char *argv);
 char	**find_command(char *argv);
-
+char	**undo_split(char **array);
+void	close_fds(int nr_fds, ...);
 
 #endif

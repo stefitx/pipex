@@ -13,9 +13,29 @@
 #include "../includes/pipex.h"
 #include "../libft/libft.h"
 
+void	close_fds(int nr_fds, ...)
+{
+	va_list	args;
+	int		i;
+	int		fd;
+
+	i = 0;
+	if (nr_fds <= 0)
+		return ;
+	va_start(args, nr_fds);
+	while (i < nr_fds)
+	{
+		fd = va_arg(args, int);
+		if (fd >= 0)
+			close(fd);
+		i++;
+	}
+	va_end(args);
+}
+
 char	**find_path(char **env)
 {
-	int i;
+	int		i;
 	char	*to_split;
 	char	**split_path;
 
@@ -28,27 +48,27 @@ char	**find_path(char **env)
 	}
 	to_split = ft_substr(env[i], 5, ft_strlen(env[i]));
 	split_path = ft_split(to_split, ':');
+	free(to_split);
 	return (split_path);
 }
 
 char	**find_command(char *argv)
 {
-	char **command;
+	char	**command;
+
 	command = ft_split(argv, ' ');
 	return (command);
 }
 
-
 char	*access_path(char **env, char *argv)
 {
-	int i;
+	int		i;
 	char	*path;
 	char	**split_path;
 	char	**command;
 
 	split_path = find_path(env);
 	command = find_command(argv);
-	
 	i = 0;
 	while (split_path[i])
 	{
