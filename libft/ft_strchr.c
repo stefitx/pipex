@@ -34,6 +34,20 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
+char	**free_matrix(char **matrix, int column_num)
+{
+	int	i;
+
+	i = 0;
+	while (i < column_num)
+	{
+		free(matrix[i]);
+		i++;
+	}
+	free(matrix);
+	return (NULL);
+}
+
 /*int main(void)
 {
 	const char *s = "when will this pain end";

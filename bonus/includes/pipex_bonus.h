@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atudor <atudor@student.42barcelon>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -26,10 +26,5 @@ char	*access_path(char **env, char *argv);
 char	**find_command(char *argv);
 char	**undo_split(char **array);
 void	close_fds(int nr_fds, ...);
-void	validate_args(int argc);
-void	pipe_error(int pipefd1[2], int pipefd2[2]);
-void	execute_command(char **env, char *command);
-int		wait_for_process(pid_t pid);
-char	**mod_split(char *s, char c);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: atudor <atudor@student.42barcelon>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/25 05:04:24 by atudor            #+#    #+#              #
-#    Updated: 2023/12/12 14:57:44 by atudor           ###   ########.fr        #
+#    Updated: 2023/12/23 18:53:22 by atudor           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,50 +15,58 @@ CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
 RM		= rm -f
 
+BONUS_SRCS_DIR = bonus/srcs/
+BONUS_FILES = pipex_bonus pipex_utils_bonus
 SRC_DIR	= srcs/
-FILES	= pipex pipex_utils
+FILES	= pipex pipex_utils pipex_process_utils
 
+BONUS_HEADER = bonus/includes/
 HEADER	= includes/
 LIB_H	= libft/
 LIBFT_DIR = libft
 
 INCLUDE	= -I$(HEADER) -I$(LIB_H)
+BONUS_INCLUDE = -I$(BONUS_HEADER) -I$(LIB_H)
 
-SRCS	= $(addprefix $(SRC_DIR), $(addsuffix .c,$(FILES)))
+BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(addsuffix .c,$(BONUS_FILES)))
+SRCS = $(if $(BONUS), $(addprefix $(BONUS_SRCS_DIR), $(addsuffix .c,$(BONUS_FILES))), $(addprefix $(SRC_DIR), $(addsuffix .c,$(FILES))))
+BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 OBJS	= $(SRCS:.c=.o)
-# DEPS	= $(subst .o,.d,$(OBJS))
 LIB		= libft/
 
 %.o: %.c $(HEADER) $(LIB_H) Makefile
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	@echo "Compiling $<"
 
-#	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+${NAME}: libft.a ${OBJS} 
+	@$(CC) $(CFLAGS) -o ${NAME} ${OBJS} -L $(LIBFT_DIR) -lft
+	@echo "Pipex compiled!"
 
-${NAME}: libft.a ${OBJS}
-	    $(CC) $(CFLAGS) -o ${NAME} ${OBJS} -L $(LIBFT_DIR) -lft
-	    @echo "Pipex compiled!"
+${BONUS}: libft.a ${BONUS_OBJS}
+	@$(CC) $(CFLAGS) -o ${NAME} ${BONUS_OBJS} -L $(LIBFT_DIR) -lft
+	@echo "Bonus compiled!"
 
 .SILENT:
 
 libft.a:
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 	@echo "Libft compiled!"
 
-all:
-	@$(MAKE) -C $(LIB)
-	@$(MAKE) $(NAME)
+all: 
+	@$(MAKE) $(NAME) --no-print-directory
 
-#bonus:		all
+bonus:
+	@$(MAKE) BONUS=1 $(NAME) --no-print-directory
 
 clean:
 	@${RM} $(OBJS) $(DEPS)
-	@$(MAKE) -C $(LIB) clean 
+	@${RM} $(BONUS_OBJS) $(DEPS)
+	@$(MAKE) -C $(LIB) clean --no-print-directory
 
 fclean:		clean
-			${RM} ${NAME}
-			$(MAKE) -C $(LIB) fclean 
+			@${RM} ${NAME}
+			@$(MAKE) -C $(LIB) fclean --no-print-directory
 
 re:			fclean all
 
-.PHONY:		all clean fclean re libft.a
-
+.PHONY:		all clean fclean re libft.a bonus
