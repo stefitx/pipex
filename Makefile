@@ -6,7 +6,7 @@
 #    By: atudor <atudor@student.42barcelon>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/25 05:04:24 by atudor            #+#    #+#              #
-#    Updated: 2023/12/23 18:53:22 by atudor           ###   ########.fr        #
+#    Updated: 2024/01/02 17:33:20 by atudor           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS	= -Wall -Wextra -Werror -g
 RM		= rm -f
 
 BONUS_SRCS_DIR = bonus/srcs/
-BONUS_FILES = pipex_bonus pipex_utils_bonus
+BONUS_FILES = pipex_bonus pipex_utils_bonus pipex_process_bonus
 SRC_DIR	= srcs/
 FILES	= pipex pipex_utils pipex_process_utils
 
@@ -70,3 +70,4 @@ fclean:		clean
 re:			fclean all
 
 .PHONY:		all clean fclean re libft.a bonus
+

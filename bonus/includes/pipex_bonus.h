@@ -26,5 +26,11 @@ char	*access_path(char **env, char *argv);
 char	**find_command(char *argv);
 char	**undo_split(char **array);
 void	close_fds(int nr_fds, ...);
+pid_t	create_fork(pid_t pid);
+void	execute_command(char **env, char *command);
+void	execute_middle_command(int **pipefd, char *argv, char **env, int j);
+int	wait_for_process(pid_t pid);
+void	validate_args(int argc);
+void	pipe_error(int *pipefd1);
 
 #endif

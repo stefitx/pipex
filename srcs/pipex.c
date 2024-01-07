@@ -69,27 +69,24 @@ void	execute_first_command(int *pipefd, char **argv, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	int		pipefd1[2];
-	int		pipefd2[2];
-	int		final_status;
 	pid_t	pid1;
 	pid_t	pid2;
 
-	final_status = 0;
 	validate_args(argc);
-	pipe_error(pipefd1, pipefd2);
+	pipe_error(pipefd1, pipefd1);
 	pid1 = fork();
 	if (pid1 == 0)
 	{
-		close_fds(3, pipefd1[0], pipefd2[0], pipefd2[1]);
+		close_fds(1, pipefd1[0]);
 		execute_first_command(pipefd1, argv, env);
 	}
 	pid2 = fork();
 	if (pid2 == 0)
 	{
 		dup2(pipefd1[0], 0);
-		close_fds(2, pipefd1[1], pipefd2[0]);
-		execute_second_command(pipefd2, argv, env);
+		close_fds(2, pipefd1[1], pipefd1[0]);
+		execute_second_command(pipefd1, argv, env);
 	}
-	close_fds(4, pipefd1[0], pipefd1[1], pipefd2[0], pipefd2[1]);
+	close_fds(2, pipefd1[0], pipefd1[1]);
 	return (wait_for_process(pid2));
 }
