@@ -16,7 +16,9 @@ CFLAGS	= -Wall -Wextra -Werror -g
 RM		= rm -f
 
 BONUS_SRCS_DIR = bonus/srcs/
+BONUS_GNL_DIR = bonus/includes/get_next_line/
 BONUS_FILES = pipex_bonus pipex_utils_bonus pipex_process_bonus
+GNL_FILES = $(addprefix $(BONUS_GNL_DIR), get_next_line.c get_next_line_utils.c)
 SRC_DIR	= srcs/
 FILES	= pipex pipex_utils pipex_process_utils
 
@@ -28,8 +30,8 @@ LIBFT_DIR = libft
 INCLUDE	= -I$(HEADER) -I$(LIB_H)
 BONUS_INCLUDE = -I$(BONUS_HEADER) -I$(LIB_H)
 
-BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(addsuffix .c,$(BONUS_FILES)))
-SRCS = $(if $(BONUS), $(addprefix $(BONUS_SRCS_DIR), $(addsuffix .c,$(BONUS_FILES))), $(addprefix $(SRC_DIR), $(addsuffix .c,$(FILES))))
+BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(addsuffix .c,$(BONUS_FILES))) $(GNL_FILES)
+SRCS = $(if $(BONUS), $(BONUS_SRCS), $(addprefix $(SRC_DIR), $(addsuffix .c,$(FILES))))
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 OBJS	= $(SRCS:.c=.o)
 LIB		= libft/

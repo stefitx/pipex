@@ -20,7 +20,7 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-void	execute_first_command(int *pipefd, char **argv, char **env);
+void	execute_first_command(int **pipefd, char *command, char *infile, char **env);
 char	**find_path(char **env);
 char	*access_path(char **env, char *argv);
 char	**find_command(char *argv);
