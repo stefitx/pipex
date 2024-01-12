@@ -57,8 +57,27 @@ int	wait_for_process(pid_t pid)
 	return (0);
 }
 
-pid_t	create_fork(pid_t pid)
+void execute_first_command_here_doc(int *pipefd1, int *pipefd2, char *argv, char **env)
 {
-	pid = fork();
-	return (pid);
+    dup2(pipefd1[0], 0); //reading from the pipe
+    close(pipefd1[0]);
+    dup2(pipefd2[1], 1);
+    close(pipefd2[1]);
+    execve(access_path(env, argv), find_command(argv), env);
+    exit(EXIT_FAILURE);
+}
+void execute_last_command_here_doc(int *pipefd, char *argv, char **env, char *outfile)
+{
+    int fd = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fd < 0) {
+        perror(outfile);
+        exit(EXIT_FAILURE);
+    }
+    dup2(fd, 1);
+    close(fd);
+    dup2(pipefd[0], 0);
+    close(pipefd[0]);
+    close(pipefd[1]);
+    execve(access_path(env, argv), find_command(argv), env);
+    exit(EXIT_FAILURE);
 }

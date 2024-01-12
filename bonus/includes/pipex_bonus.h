@@ -32,5 +32,7 @@ void	execute_middle_command(int **pipefd, char *argv, char **env, int j);
 int	wait_for_process(pid_t pid);
 void	validate_args(int argc);
 void	pipe_error(int *pipefd1);
+void execute_first_command_here_doc(int *pipefd1, int *pipefd2, char *argv, char **env);
+void execute_last_command_here_doc(int *pipefd, char *argv, char **env, char *outfile);
 
 #endif
