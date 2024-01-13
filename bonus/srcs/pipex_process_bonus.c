@@ -31,20 +31,6 @@ void	pipe_error(int *pipefd1)
 	}
 }
 
-void	execute_command(char **env, char *command)
-{
-	char	**cmd;
-	char	*path;
-
-	cmd = find_command(command);
-	path = access_path(env, command);
-	if (execve(path, cmd, env) == -1)
-	{
-		perror("Command execution failed");
-		exit(EXIT_FAILURE);
-	}
-}
-
 int	wait_for_process(pid_t pid)
 {
 	int	status;
@@ -57,27 +43,45 @@ int	wait_for_process(pid_t pid)
 	return (0);
 }
 
-void execute_first_command_here_doc(int *pipefd1, int *pipefd2, char *argv, char **env)
+void	malloc_and_free(int **pipefd, pid_t *pid, char check, int argc)
 {
-    dup2(pipefd1[0], 0); //reading from the pipe
-    close(pipefd1[0]);
-    dup2(pipefd2[1], 1);
-    close(pipefd2[1]);
-    execve(access_path(env, argv), find_command(argv), env);
-    exit(EXIT_FAILURE);
+	int	j;
+
+	j = 0;
+	if (check == '1')
+	{
+		while (j < (argc - 4))
+		{
+			pipefd[j] = malloc(sizeof(int) * 2);
+			pipe_error(pipefd[j]);
+			j++;
+		}
+	}
+	if (check == '2')
+	{
+		while (j < (argc - 4))
+		{
+			close(pipefd[j++][0]);
+			waitpid(pid[j++], NULL, 0);
+		}
+		j = 0;
+		while (j < (argc - 4))
+			free(pipefd[j++]);
+		free(pipefd);
+		free(pid);
+	}
 }
-void execute_last_command_here_doc(int *pipefd, char *argv, char **env, char *outfile)
+
+void	create_pipes_and_close_them(int j, int argc, int **pipefd, char check)
 {
-    int fd = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd < 0) {
-        perror(outfile);
-        exit(EXIT_FAILURE);
-    }
-    dup2(fd, 1);
-    close(fd);
-    dup2(pipefd[0], 0);
-    close(pipefd[0]);
-    close(pipefd[1]);
-    execve(access_path(env, argv), find_command(argv), env);
-    exit(EXIT_FAILURE);
+	if (check == '1')
+	{
+		if (j < (argc - 3) - 1)
+			pipe_error(pipefd[j]);
+	}
+	if (check == '2')
+	{
+		if (j < (argc - 3) - 1)
+			close(pipefd[j][1]);
+	}
 }
