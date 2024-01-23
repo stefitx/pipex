@@ -13,13 +13,17 @@
 #include "../includes/pipex_bonus.h"
 #include "../../libft/libft.h"
 
-void	validate_args(int argc)
+int	validate_args(int argc, char **argv)
 {
 	if (argc < 5)
 	{
-		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 38);
+		write(2, "Usage: ./pipex file1 cmd1 cmd2 ... cmdn file2 ", 46);
+		write(2, "OR ./pipex here_doc LIMITER cmd cmd1 file\n", 43);
 		exit(EXIT_FAILURE);
 	}
+	if (ft_strncmp("here_doc", argv[1], 8) == 0)
+		return (1);
+	return (0);
 }
 
 void	pipe_error(int *pipefd1)

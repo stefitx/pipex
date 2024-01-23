@@ -17,29 +17,23 @@
 int	here_doc_function(char **argv, char **env)
 {
 	pid_t	pid1;
+	pid_t	pid2;
 	int		pipefd[2];
 	int		pipefd1[2];
 
-	if (ft_strncmp("here_doc", argv[1], 8) == 0)
-	{
-		pipe_error(pipefd);
-		pipe_error(pipefd1);
-		write_in_pipe(pipefd, argv);
-		close(pipefd[1]);
-		pid1 = fork();
-		if (pid1 == 0)
-			execute_first_command_here_doc(pipefd, pipefd1, argv[3], env);
-		else
-		{
-			waitpid(pid1, NULL, 0);
-			close_fds(2, pipefd[0], pipefd[1]);
-			execute_last_command_here_doc(pipefd1, argv[4], env, argv[5]);
-			close_fds(pipefd1[0], pipefd[1]);
-		}
-		return (1);
-	}
-	else
-		return (0);
+	pipe_error(pipefd);
+	pipe_error(pipefd1);
+	write_in_pipe(pipefd, argv);
+	close(pipefd[1]);
+	pid1 = fork();
+	if (pid1 == 0)
+		execute_first_command_here_doc(pipefd, pipefd1, argv[3], env);
+	pid2 = fork();
+	if (pid2 == 0)
+		execute_last_command_here_doc(pipefd1, argv[4], env, argv[5]);
+	close_fds(2, pipefd[0], pipefd[1]);
+	close_fds(2, pipefd1[0], pipefd1[1]);
+	return (wait_for_process(pid2));
 }
 
 void	write_in_pipe(int *pipefd, char **argv)

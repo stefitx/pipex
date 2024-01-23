@@ -33,7 +33,7 @@ void	execute_second_command(int *pipefd, char **argv, char **env)
 	dup2(pipefd[0], 0);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	execve(access_path(env, argv[3]), find_command(argv[3]), env);
+	execute_command(env, argv[3]);
 	exit(EXIT_FAILURE);
 }
 

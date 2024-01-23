@@ -30,7 +30,7 @@ pid_t	create_fork(pid_t pid);
 void	execute_command(char **env, char *command);
 void	execute_middle_command(int **pipefd, char *argv, char **env, int j);
 int		wait_for_process(pid_t pid);
-void	validate_args(int argc);
+int		validate_args(int argc, char **argv);
 void	pipe_error(int *pipefd1);
 void	execute_first_command_here_doc(int *f1, int *f2, char *av, char **env);
 void	execute_last_command_here_doc(int *fd, char *av, char **env, char *out);

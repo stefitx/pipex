@@ -94,14 +94,15 @@ int	main(int argc, char **argv, char **env)
 {
 	int		**pipefd;
 	pid_t	*pid;
+	int		exit_status;
 
-	validate_args(argc);
-	if (here_doc_function(argv, env) != 0)
-		return (0);
+	if (validate_args(argc, argv) != 0)
+		return (here_doc_function(argv, env));
 	pipefd = malloc(sizeof(int *) * (argc - 4));
 	pid = NULL;
 	malloc_and_free(pipefd, pid, '1', argc);
 	pid = do_commands(argc, argv, env, pipefd);
+	exit_status = wait_for_process(pid[argc - 4]);
 	malloc_and_free(pipefd, pid, '2', argc);
-	return (0);
+	return (exit_status);
 }

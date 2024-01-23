@@ -35,11 +35,17 @@ void	execute_command(char **env, char *command)
 {
 	char	**cmd;
 	char	*path;
+	int		i;
 
 	cmd = find_command(command);
+	i = 0;
+	while (cmd[i] != NULL)
+		i++;
 	path = access_path(env, command);
 	if (execve(path, cmd, env) == -1)
 	{
+		free_matrix(cmd, i);
+		free(path);
 		perror("Command execution failed");
 		exit(EXIT_FAILURE);
 	}
