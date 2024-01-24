@@ -64,7 +64,7 @@ void	execute_first_command_here_doc(int *f1, int *f2, char *av, char **env)
 	close(f1[0]);
 	dup2(f2[1], 1);
 	close(f2[1]);
-	execve(access_path(env, av), find_command(av), env);
+	execute_command(env, av);
 	exit(EXIT_FAILURE);
 }
 
@@ -83,6 +83,6 @@ void	execute_last_command_here_doc(int *fd, char *av, char **env, char *out)
 	dup2(fd[0], 0);
 	close(fd[0]);
 	close(fd[1]);
-	execve(access_path(env, av), find_command(av), env);
+	execute_command(env, av);
 	exit(EXIT_FAILURE);
 }

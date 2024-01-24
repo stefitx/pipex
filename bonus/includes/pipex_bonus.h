@@ -38,5 +38,6 @@ int		here_doc_function(char **argv, char **env);
 void	write_in_pipe(int *pipefd, char **argv);
 void	malloc_and_free(int **pipefd, pid_t *pid, char check, int argc);
 void	create_pipes_and_close_them(int j, int argc, int **pipefd, char check);
+void	free_matrixes(char **split_path, char **command);
 
 #endif

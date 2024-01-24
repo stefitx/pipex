@@ -31,5 +31,6 @@ void	pipe_error(int pipefd1[2], int pipefd2[2]);
 void	execute_command(char **env, char *command);
 int		wait_for_process(pid_t pid);
 char	**mod_split(char *s, char c);
+void	free_matrixes(char **split_path, char **command);
 
 #endif

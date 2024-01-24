@@ -17,7 +17,7 @@ RM		= rm -f
 
 BONUS_SRCS_DIR = bonus/srcs/
 BONUS_GNL_DIR = bonus/includes/get_next_line/
-BONUS_FILES = pipex_bonus pipex_utils_bonus pipex_process_bonus bonus_here_doc
+BONUS_FILES = pipex_bonus pipex_utils_bonus pipex_process_bonus bonus_here_doc pipex_utils2_bonus
 GNL_FILES = $(addprefix $(BONUS_GNL_DIR), get_next_line.c get_next_line_utils.c)
 SRC_DIR	= srcs/
 FILES	= pipex pipex_utils pipex_process_utils

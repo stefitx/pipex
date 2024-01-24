@@ -20,7 +20,7 @@ void	execute_middle_command(int **pipefd, char *argv, char **env, int j)
 	close(pipefd[j - 1][0]);
 	dup2(pipefd[j][1], 1);
 	close(pipefd[j][1]);
-	execve(access_path(env, argv), find_command(argv), env);
+	execute_command(env, argv);
 	exit(EXIT_FAILURE);
 }
 
@@ -41,7 +41,7 @@ void	execute_last_command(int **pipefd, char **argv, char **env, int argc)
 	dup2(pipefd[pipe_num - 1][0], 0);
 	close(pipefd[pipe_num - 1][0]);
 	close(pipefd[pipe_num - 1][1]);
-	execve(access_path(env, argv[argc - 2]), find_command(argv[argc - 2]), env);
+	execute_command(env, argv[argc - 2]);
 	exit(EXIT_FAILURE);
 }
 
@@ -59,7 +59,7 @@ void	execute_first_command(int **fd, char *command, char *in, char **env)
 	close(fd1);
 	dup2(fd[0][1], 1);
 	close(fd[0][1]);
-	execve(access_path(env, command), find_command(command), env);
+	execute_command(env, command);
 	exit(EXIT_FAILURE);
 }
 

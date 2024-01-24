@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_process_utils.c                              :+:      :+:    :+:   */
+/*   pipex_utils2_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atudor <atudor@student.42barcelon>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/21 21:20:06 by atudor            #+#    #+#             */
-/*   Updated: 2023/12/21 21:20:10 by atudor           ###   ########.fr       */
+/*   Created: 2024/01/24 15:35:24 by atudor            #+#    #+#             */
+/*   Updated: 2024/01/24 15:35:27 by atudor           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
-#include "../libft/libft.h"
+#include "../includes/pipex_bonus.h"
+#include "../../libft/libft.h"
 
 void	close_fds(int nr_fds, ...)
 {
@@ -31,24 +31,6 @@ void	close_fds(int nr_fds, ...)
 		i++;
 	}
 	va_end(args);
-}
-
-void	validate_args(int argc)
-{
-	if (argc != 5)
-	{
-		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 38);
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	pipe_error(int pipefd1[2], int pipefd2[2])
-{
-	if (pipe(pipefd1) == -1 || pipe(pipefd2) == -1)
-	{
-		write(2, "Error creating pipe", 19);
-		exit(EXIT_FAILURE);
-	}
 }
 
 void	execute_command(char **env, char *command)
@@ -71,14 +53,16 @@ void	execute_command(char **env, char *command)
 	}
 }
 
-int	wait_for_process(pid_t pid)
+void	free_matrixes(char **split_path, char **command)
 {
-	int	status;
+	int	i;
 
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-	{
-		return (WEXITSTATUS(status));
-	}
-	return (0);
+	i = 0;
+	while (split_path[i] != NULL)
+		i++;
+	free_matrix(split_path, i);
+	i = 0;
+	while (command[i] != NULL)
+		i++;
+	free_matrix(command, i);
 }

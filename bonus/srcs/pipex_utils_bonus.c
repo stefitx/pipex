@@ -13,26 +13,6 @@
 #include "../includes/pipex_bonus.h"
 #include "../../libft/libft.h"
 
-void	close_fds(int nr_fds, ...)
-{
-	va_list	args;
-	int		i;
-	int		fd;
-
-	i = 0;
-	if (nr_fds <= 0)
-		return ;
-	va_start(args, nr_fds);
-	while (i < nr_fds)
-	{
-		fd = va_arg(args, int);
-		if (fd >= 0)
-			close(fd);
-		i++;
-	}
-	va_end(args);
-}
-
 char	**find_path(char **env)
 {
 	int		i;
@@ -80,62 +60,30 @@ char	*construct_command_path(char **split_path, char *command)
 	return (NULL);
 }
 
-void	free_matrixes(char **split_path, char **command)
-{
-	int	i;
-
-	i = 0;
-	while (split_path[i] != NULL)
-		i++;
-	free_matrix(split_path, i);
-	i = 0;
-	while (command[i] != NULL)
-		i++;
-	free_matrix(command, i);
-}
-
-char	*is_here(char **split_path, char **command)
-{
-	if (access(command[0], F_OK) == 0)
-	{
-		if (access(command[0], X_OK) == -1)
-		{
-			ft_putstr_fd(command[0], 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-			free_matrixes(split_path, command);
-			exit(126);
-		}
-		return (command[0]);
-	}
-	else
-		return (NULL);
-}
-
 char	*access_path(char **env, char *argv)
 {
 	char	*path;
 	char	**split_path;
 	char	**command;
-	char	*command_0;
 
 	split_path = find_path(env);
 	command = find_command(argv);
-	command_0 = is_here(split_path, command);
-	if (command_0 != NULL)
+	if (access(command[0], F_OK) == 0)
 	{
-		free_matrixes(split_path, command);
-		return (command_0);
+		if (access(command[0], X_OK) == -1)
+		{
+			ft_putstr_fd(command[0], 2);
+			ft_putstr_fd(": Permission denied", 2);
+			exit(126);
+		}
+		return (command[0]);
 	}
-	command_0 = command[0];
-	path = construct_command_path(split_path, command_0);
-	free_matrixes(split_path, command);
+	path = construct_command_path(split_path, command[0]);
 	if (path != NULL)
 		return (path);
 	ft_putstr_fd("zsh: ", 2);
-	ft_putstr_fd("command not found: ", 2);
-	ft_putstr_fd(command_0, 2);
-	write(2, "\n", 1);
+	ft_putstr_fd(command[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	exit(127);
 	return (NULL);
 }
-

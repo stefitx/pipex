@@ -41,9 +41,7 @@ int	wait_for_process(pid_t pid)
 
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-	{
 		return (WEXITSTATUS(status));
-	}
 	return (0);
 }
 
