@@ -1,0 +1,3 @@
+A project to mimic the functionality of the pipe (the '|' character), in C
+The "make" command will make an executable that can be used as such: "./pipex infile "ls -l" "wc -l" outfile" and will behave as the following command in bash: "< infile ls -l | wc -l > outfile". Of course any valid commands and executables will be executed.
+The "make bonus" command will make the same executable that will be able to execute as many commands as the system allows, or it can be executed as such: "./pipex here_doc LIMITER cmd cmd1 file" and will behave as the following command on bash "cmd << LIMITER | cmd1 >> file".
